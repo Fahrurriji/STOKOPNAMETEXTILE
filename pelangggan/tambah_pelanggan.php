@@ -15,7 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else { $error = 'Gagal: ' . $conn->error; }
 }
 $ka = generate_kode($conn, 'pelanggan', 'kode_pelanggan', 'PLG');
-include 'header.php';
+include '../header.php';
 ?>
 <?php if (isset($error)): ?><div class="alert alert-danger"><?= $error ?></div><?php endif; ?>
 <div style="max-width:700px;margin:0 auto"><div class="card">
@@ -34,4 +34,4 @@ include 'header.php';
     </div>
   </form></div>
 </div></div>
-<?php include 'footer.php'; ?>
+<?php include '../footer.php'; ?>

@@ -7,7 +7,7 @@ if (isset($_SESSION['error'])) { $error = $_SESSION['error']; unset($_SESSION['e
 $search = esc($conn, $_GET['search'] ?? '');
 $where = $search ? "WHERE nama_pemasok LIKE '%$search%' OR kode_pemasok LIKE '%$search%'" : '';
 $data = $conn->query("SELECT * FROM pemasok $where ORDER BY id DESC");
-include 'header.php';
+include '../header.php';
 ?>
 <?php if (isset($pesan)): ?><div class="alert alert-success"><i class="fas fa-check-circle"></i> <?= $pesan ?></div><?php endif; ?>
 <?php if (isset($error)): ?><div class="alert alert-danger"><i class="fas fa-times-circle"></i> <?= $error ?></div><?php endif; ?>
@@ -51,4 +51,4 @@ include 'header.php';
     </table>
   </div>
 </div>
-<?php include 'footer.php'; ?>
+<?php include '../footer.php'; ?>

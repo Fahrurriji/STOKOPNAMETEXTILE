@@ -12,7 +12,7 @@ $data = $conn->query("SELECT tk.*, pl.nama_pelanggan, a.nama_lengkap as nama_adm
     LEFT JOIN admin a ON tk.id_admin = a.id
     WHERE tk.tanggal BETWEEN '$tgl_awal' AND '$tgl_akhir'
     ORDER BY tk.id DESC");
-include 'header.php';
+include '../header.php';
 ?>
 <?php if (isset($pesan)): ?><div class="alert alert-success"><i class="fas fa-check-circle"></i> <?= $pesan ?></div><?php endif; ?>
 <?php if (isset($error)): ?><div class="alert alert-danger"><i class="fas fa-times-circle"></i> <?= $error ?></div><?php endif; ?>
@@ -66,4 +66,4 @@ include 'header.php';
     </table>
   </div>
 </div>
-<?php include 'footer.php'; ?>
+<?php include '../footer.php'; ?>

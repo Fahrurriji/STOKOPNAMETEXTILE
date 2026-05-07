@@ -52,7 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-include 'header.php';
+include '../header.php';
 ?>
 <?php if (isset($error)): ?><div class="alert alert-danger"><i class="fas fa-times-circle"></i> <?= $error ?></div><?php endif; ?>
 
@@ -189,4 +189,4 @@ function hapusBaris(n) {
 // Tambah 1 baris awal
 tambahBaris();
 </script>
-<?php include 'footer.php'; ?>
+<?php include '../footer.php'; ?>

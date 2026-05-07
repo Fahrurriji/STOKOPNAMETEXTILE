@@ -15,7 +15,7 @@ $data = $conn->query("SELECT tm.*, p.nama_pemasok, a.nama_lengkap as nama_admin
     WHERE tm.tanggal BETWEEN '$tgl_awal' AND '$tgl_akhir'
     ORDER BY tm.id DESC");
 
-include 'header.php';
+include '../header.php';
 ?>
 <?php if (isset($pesan)): ?><div class="alert alert-success"><i class="fas fa-check-circle"></i> <?= $pesan ?></div><?php endif; ?>
 <?php if (isset($error)): ?><div class="alert alert-danger"><i class="fas fa-times-circle"></i> <?= $error ?></div><?php endif; ?>
@@ -69,4 +69,4 @@ include 'header.php';
     </table>
   </div>
 </div>
-<?php include 'footer.php'; ?>
+<?php include '../footer.php'; ?>

@@ -56,7 +56,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 $kode_otomatis = generate_kode($conn, 'barang', 'kode_barang', 'BRG');
-include 'header.php';
+include '../header.php';
 ?>
 
 <?php if (isset($error)): ?>
@@ -238,4 +238,4 @@ include 'header.php';
     </div>
 </div>
 
-<?php include 'footer.php'; ?>
+<?php include '../footer.php';

@@ -43,7 +43,7 @@ $history = $conn->query("SELECT so.*, a.nama_lengkap FROM stock_opname so LEFT J
 // Data barang untuk form
 $barang_all = $conn->query("SELECT b.*, k.nama_kategori FROM barang b LEFT JOIN kategori k ON b.id_kategori=k.id WHERE b.status='aktif' ORDER BY k.nama_kategori, b.nama_barang");
 
-include 'header.php';
+include '../header.php';
 ?>
 <?php if (isset($pesan)): ?><div class="alert alert-success"><i class="fas fa-check-circle"></i> <?= $pesan ?></div><?php endif; ?>
 <?php if (isset($error)): ?><div class="alert alert-danger"><i class="fas fa-times-circle"></i> <?= $error ?></div><?php endif; ?>
@@ -181,4 +181,4 @@ function filterTable(val) {
     });
 }
 </script>
-<?php include 'footer.php'; ?>
+<?php include '../footer.php';

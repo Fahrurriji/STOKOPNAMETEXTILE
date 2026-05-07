@@ -16,7 +16,7 @@ $data = $conn->query($sql);
 if (isset($_SESSION['pesan'])) { $pesan = $_SESSION['pesan']; unset($_SESSION['pesan']); }
 if (isset($_SESSION['error'])) { $error = $_SESSION['error']; unset($_SESSION['error']); }
 
-include 'header.php';
+include '../header.php';
 ?>
 
 <?php if ($pesan): ?><div class="alert alert-success"><i class="fas fa-check-circle"></i> <?= $pesan ?></div><?php endif; ?>
@@ -100,4 +100,4 @@ include 'header.php';
     </div>
 </div>
 
-<?php include 'footer.php'; ?>
+<?php include '../footer.php'; ?>

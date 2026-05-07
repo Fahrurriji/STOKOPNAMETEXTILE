@@ -29,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-include 'header.php';
+include '../header.php';
 ?>
 
 <div style="max-width:620px;margin:0 auto">
@@ -81,4 +81,4 @@ include 'header.php';
     </div>
 </div>
 
-<?php include 'footer.php'; ?>
+<?php include '../footer.php';
