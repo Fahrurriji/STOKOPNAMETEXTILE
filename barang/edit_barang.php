@@ -68,7 +68,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-include '../config/header.php';
+include 'header.php';
 ?>
 
 <?php if (isset($error)): ?>
@@ -247,4 +247,4 @@ include '../config/header.php';
     </div>
 </div>
 
-<?php include '../config/footer.php'; ?>
+<?php include 'footer.php'; ?>

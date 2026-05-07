@@ -3,20 +3,27 @@
 if (session_status() === PHP_SESSION_NONE) session_start();
 
 if (!isset($_SESSION['user_id'])) {
-    // Tentukan path ke login.php
-    $depth = '';
-    $dir = basename(dirname($_SERVER['PHP_SELF']));
-    if ($dir !== 'STOKOPNAMETEXTILE' && $dir !== '.') {
-        $depth = '../';
+    // Hitung BASE URL
+    $script_url = str_replace('\\', '/', $_SERVER['PHP_SELF']);
+    $project_folder = 'STOKOPNAMETEXTILE';
+    $parts = explode('/', trim($script_url, '/'));
+    $base_index = array_search($project_folder, $parts);
+    if ($base_index !== false) {
+        $BASE = '/' . implode('/', array_slice($parts, 0, $base_index + 1)) . '/';
+    } else {
+        $BASE = '/' . $project_folder . '/';
     }
-    header('Location: ' . $depth . 'login.php');
+    header('Location: ' . $BASE . 'login.php');
     exit;
 }
 
-// Cek role admin
 function cek_admin() {
     if ($_SESSION['role'] !== 'admin') {
-        header('Location: ../index.php');
+        $script_url = str_replace('\\', '/', $_SERVER['PHP_SELF']);
+        $parts = explode('/', trim($script_url, '/'));
+        $base_index = array_search('STOKOPNAMETEXTILE', $parts);
+        $BASE = ($base_index !== false) ? '/' . implode('/', array_slice($parts, 0, $base_index + 1)) . '/' : '/STOKOPNAMETEXTILE/';
+        header('Location: ' . $BASE . 'index.php');
         exit;
     }
 }

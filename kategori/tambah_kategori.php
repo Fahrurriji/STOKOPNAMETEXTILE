@@ -31,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 // Auto-generate kode untuk tampilan
 $kode_otomatis = generate_kode($conn, 'kategori', 'kode_kategori', 'KAT');
 
-include '../config/header.php';
+include 'header.php';
 ?>
 
 <div style="max-width:620px;margin:0 auto">
@@ -87,4 +87,4 @@ include '../config/header.php';
     </div>
 </div>
 
-<?php include '../config/footer.php'; ?>
+<?php include 'footer.php'; ?>

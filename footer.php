@@ -3,7 +3,7 @@
 </div> <!-- Penutup .app-wrapper -->
 
 <!-- FOOTER INFO (Optional) -->
-<footer style="text-align: center; padding: 20px; color: #64748b; font-size: 12px; background: #f8fafc;">
+<footer class="text-center" style="padding:20px;">
     &copy; <?= date('Y') ?> <strong>Textile Gudang</strong> - System Stock Opname
 </footer>
 

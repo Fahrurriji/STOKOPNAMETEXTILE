@@ -10,6 +10,15 @@ define('DB_PASS', '');
 define('DB_NAME', 'db_stokopname');
 define('DB_CHARSET', 'utf8mb4');
 
+
+// Session start
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+    error_reporting(E_ALL);
+ini_set('display_errors', 1);
+}
+
+
 // Koneksi menggunakan MySQLi
 $conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 
@@ -57,10 +66,7 @@ function generate_kode($conn, $table, $field, $prefix, $digit = 4) {
     return $prefix . str_pad($num, $digit, '0', STR_PAD_LEFT);
 }
 
-// Session start
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-    error_reporting(E_ALL);
-ini_set('display_errors', 1);
-}
+
+
+
 ?>

@@ -952,4 +952,8 @@ textarea.form-control { padding-left: 14px; resize: vertical; }
   .main-content { margin: 0; }
   .page-content { padding: 0; }
   .card { box-shadow: none; }
+
+  body {
+  background: red !important;
+}
 }

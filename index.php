@@ -1,6 +1,7 @@
 <?php
 require_once 'config/auth.php';
 require_once 'config/koneksi.php';
+
 $page_title = 'Dashboard';
 
 // === STATISTIK ===
@@ -84,7 +85,7 @@ include 'header.php';
 </div>
 
 <!-- ROW GRID -->
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:24px">
+<div class="stats-grid">
 
     <!-- Stok Rendah -->
     <div class="card">

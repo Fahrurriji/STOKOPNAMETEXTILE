@@ -23,7 +23,7 @@ $data = $conn->query($sql);
 
 $kategori_list = $conn->query("SELECT * FROM kategori ORDER BY nama_kategori");
 
-include '../config/header.php';
+include 'header.php';
 ?>
 
 <?php if (isset($pesan)): ?><div class="alert alert-success"><i class="fas fa-check-circle"></i> <?= $pesan ?></div><?php endif; ?>
@@ -138,4 +138,4 @@ include '../config/header.php';
     </div>
 </div>
 
-<?php include '../config/footer.php'; ?>
+<?php include 'footer.php'; ?>
