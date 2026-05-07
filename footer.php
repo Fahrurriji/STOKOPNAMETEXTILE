@@ -4,7 +4,7 @@
 
 <!-- FOOTER INFO (Optional) -->
 <footer class="text-center" style="padding:20px;">
-    &copy; <?= date('Y') ?> <strong>Textile Gudang</strong> - System Stock Opname
+    &copy; <?= date('Y') ?> <strong>Textile Gudang</strong> - Kelompok 11
 </footer>
 
 <script>
