@@ -1,30 +1,23 @@
 <?php
-// Cek sesi login
 if (session_status() === PHP_SESSION_NONE) session_start();
 
+// PAKSA nama folder proyek yang benar
+$project_folder = 'STOKOPNAMETEXTILE'; 
+
+// Membuat konstanta BASEURL yang aman
+$protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https://" : "http://";
+$host = $_SERVER['HTTP_HOST'];
+define('BASEURL', $protocol . $host . '/' . $project_folder . '/');
+
+// Proteksi Login
 if (!isset($_SESSION['user_id'])) {
-    // Hitung BASE URL
-    $script_url = str_replace('\\', '/', $_SERVER['PHP_SELF']);
-    $project_folder = 'STOKOPNAMETEXTILE';
-    $parts = explode('/', trim($script_url, '/'));
-    $base_index = array_search($project_folder, $parts);
-    if ($base_index !== false) {
-        $BASE = '/' . implode('/', array_slice($parts, 0, $base_index + 1)) . '/';
-    } else {
-        $BASE = '/' . $project_folder . '/';
-    }
-    header('Location: ' . $BASE . 'login.php');
+    header('Location: ' . BASEURL . 'login.php');
     exit;
 }
 
 function cek_admin() {
     if ($_SESSION['role'] !== 'admin') {
-        $script_url = str_replace('\\', '/', $_SERVER['PHP_SELF']);
-        $parts = explode('/', trim($script_url, '/'));
-        $base_index = array_search('STOKOPNAMETEXTILE', $parts);
-        $BASE = ($base_index !== false) ? '/' . implode('/', array_slice($parts, 0, $base_index + 1)) . '/' : '/STOKOPNAMETEXTILE/';
-        header('Location: ' . $BASE . 'index.php');
+        header('Location: ' . BASEURL . 'index.php');
         exit;
     }
 }
-?>

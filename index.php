@@ -1,11 +1,17 @@
 <?php
 require_once 'config/auth.php';
 require_once 'config/koneksi.php';
-
 $page_title = 'Dashboard';
 
+// Ambil pesan error akses jika ada
+$error_akses = '';
+if (isset($_SESSION['error_akses'])) {
+    $error_akses = $_SESSION['error_akses'];
+    unset($_SESSION['error_akses']);
+}
+
 // === STATISTIK ===
-// Total produk & Nilai Inventaris
+// Total produk
 $r = $conn->query("SELECT COUNT(*) as jml, SUM(stok * harga_jual) as nilai FROM barang WHERE status='aktif'");
 $barang = $r->fetch_assoc();
 
@@ -21,9 +27,9 @@ $pemasok = $r3->fetch_assoc();
 $r4 = $conn->query("SELECT COUNT(*) as jml FROM pelanggan");
 $pelanggan = $r4->fetch_assoc();
 
-// Stok minim - NAMA VARIABEL DIGANTI AGAR TIDAK BENTROK DENGAN HEADER
+// Stok minim
 $r5 = $conn->query("SELECT COUNT(*) as jml FROM barang WHERE stok <= stok_minimum AND status='aktif'");
-$data_stok_minim = $r5->fetch_assoc();
+$stok_minim = $r5->fetch_assoc() ?? ['jml' => 0];
 
 // Transaksi bulan ini
 $bulan_ini = date('Y-m');
@@ -33,59 +39,72 @@ $t_masuk = $r6->fetch_assoc();
 $r7 = $conn->query("SELECT COALESCE(SUM(total_bayar),0) as keluar FROM transaksi_keluar WHERE DATE_FORMAT(tanggal,'%Y-%m')='$bulan_ini'");
 $t_keluar = $r7->fetch_assoc();
 
-// Data List
+// 5 produk stok rendah
 $stok_rendah = $conn->query("SELECT b.*, k.nama_kategori FROM barang b LEFT JOIN kategori k ON b.id_kategori=k.id WHERE b.status='aktif' ORDER BY b.stok ASC LIMIT 8");
+
+// 5 transaksi masuk terbaru
 $trans_masuk = $conn->query("SELECT tm.*, p.nama_pemasok FROM transaksi_masuk tm LEFT JOIN pemasok p ON tm.id_pemasok=p.id ORDER BY tm.created_at DESC LIMIT 5");
+
+// 5 transaksi keluar terbaru
 $trans_keluar = $conn->query("SELECT tk.*, pl.nama_pelanggan FROM transaksi_keluar tk LEFT JOIN pelanggan pl ON tk.id_pelanggan=pl.id ORDER BY tk.created_at DESC LIMIT 5");
 
 include 'header.php';
 ?>
+
+<?php if ($error_akses): ?>
+<div class="alert alert-danger" style="display:flex;align-items:center;gap:12px;border-left:4px solid var(--danger);animation:alertIn .4s ease">
+    <i class="fas fa-shield-alt" style="font-size:20px;color:var(--danger)"></i>
+    <div>
+        <strong>Akses Ditolak!</strong><br>
+        <span style="font-size:13px"><?= $error_akses ?></span>
+    </div>
+</div>
+<?php endif; ?>
 
 <!-- STATS GRID -->
 <div class="stats-grid">
     <div class="stat-card blue">
         <div class="stat-icon"><i class="fas fa-boxes"></i></div>
         <div class="stat-info">
-            <div class="si-value"><?= number_format($barang['jml'] ?? 0) ?></div>
+            <div class="si-value"><?= number_format($barang['jml']) ?></div>
             <div class="si-label">Total Produk Aktif</div>
         </div>
     </div>
     <div class="stat-card gold">
         <div class="stat-icon"><i class="fas fa-tags"></i></div>
         <div class="stat-info">
-            <div class="si-value"><?= $kategori['jml'] ?? 0 ?></div>
+            <div class="si-value"><?= $kategori['jml'] ?></div>
             <div class="si-label">Total Kategori</div>
         </div>
     </div>
     <div class="stat-card green">
         <div class="stat-icon"><i class="fas fa-arrow-down"></i></div>
         <div class="stat-info">
-            <div class="si-value"><?= rupiah($t_masuk['masuk'] ?? 0) ?></div>
+            <div class="si-value"><?= rupiah($t_masuk['masuk']) ?></div>
             <div class="si-label">Pembelian Bulan Ini</div>
         </div>
     </div>
     <div class="stat-card red">
         <div class="stat-icon"><i class="fas fa-arrow-up"></i></div>
         <div class="stat-info">
-            <div class="si-value"><?= rupiah($t_keluar['keluar'] ?? 0) ?></div>
+            <div class="si-value"><?= rupiah($t_keluar['keluar']) ?></div>
             <div class="si-label">Penjualan Bulan Ini</div>
         </div>
     </div>
     <div class="stat-card cyan">
         <div class="stat-icon"><i class="fas fa-exclamation-triangle"></i></div>
         <div class="stat-info">
-            <!-- MENGGUNAKAN VARIABEL BARU -->
-            <div class="si-value"><?= $data_stok_minim['jml'] ?? 0 ?></div>
+            <div class="si-value"><?= $stok_minim['jml'] ?? 0 ?></div>
             <div class="si-label">Stok Minim (Perlu Restock)</div>
-            <?php if (($data_stok_minim['jml'] ?? 0) > 0): ?>
-                <div class="si-change down">⚠️ Perlu perhatian</div>
+            <?php if (($stok_minim['jml'] ?? 0) > 0): ?>
+            <div class="si-change down">⚠️ Perlu perhatian</div>
             <?php endif; ?>
         </div>
     </div>
 </div>
 
 <!-- ROW GRID -->
-<div class="stats-grid">
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:24px">
 
     <!-- Stok Rendah -->
     <div class="card">
@@ -112,7 +131,7 @@ include 'header.php';
                 <tr>
                     <td>
                         <div style="font-weight:600;font-size:13px"><?= htmlspecialchars($b['nama_barang']) ?></div>
-                        <div style="font-size:11px;color:var(--text-muted)"><?= htmlspecialchars($b['nama_kategori'] ?? 'Tanpa Kategori') ?></div>
+                        <div style="font-size:11px;color:var(--text-muted)"><?= $b['nama_kategori'] ?></div>
                     </td>
                     <td><strong><?= $b['stok'] ?></strong> <?= $b['satuan'] ?></td>
                     <td><?= $b['stok_minimum'] ?></td>
@@ -135,7 +154,7 @@ include 'header.php';
     <!-- Info Panel -->
     <div style="display:flex;flex-direction:column;gap:24px">
         <!-- Nilai Inventaris -->
-        <div class="card">
+        <div class="card" style="animation-delay:.15s">
             <div class="card-header">
                 <div class="card-header-icon"><i class="fas fa-warehouse"></i></div>
                 <div>
@@ -147,14 +166,12 @@ include 'header.php';
                 <div style="font-size:36px;font-weight:800;color:var(--primary-dark);font-family:'Playfair Display',serif">
                     <?= rupiah($barang['nilai'] ?? 0) ?>
                 </div>
-                <p style="color:var(--text-muted);margin-top:8px">
-                    <?= $barang['jml'] ?? 0 ?> produk &bull; <?= $pemasok['jml'] ?? 0 ?> pemasok &bull; <?= $pelanggan['jml'] ?? 0 ?> pelanggan
-                </p>
+                <p style="color:var(--text-muted);margin-top:8px"><?= $barang['jml'] ?> produk &bull; <?= $pemasok['jml'] ?> pemasok &bull; <?= $pelanggan['jml'] ?> pelanggan</p>
             </div>
         </div>
 
         <!-- Quick Links -->
-        <div class="card">
+        <div class="card" style="animation-delay:.2s">
             <div class="card-header">
                 <div class="card-header-icon"><i class="fas fa-bolt"></i></div>
                 <div><h3>Aksi Cepat</h3></div>
@@ -184,8 +201,7 @@ include 'header.php';
 
 <!-- Transaksi Terbaru -->
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px">
-    <!-- Pembelian Terbaru -->
-    <div class="card">
+    <div class="card" style="animation-delay:.25s">
         <div class="card-header">
             <div class="card-header-icon" style="background:#dcfce7;color:#16a34a"><i class="fas fa-arrow-circle-down"></i></div>
             <div>
@@ -201,24 +217,22 @@ include 'header.php';
                 </thead>
                 <tbody>
                 <?php if ($trans_masuk->num_rows === 0): ?>
-                    <tr><td colspan="4" class="text-center text-muted" style="padding:24px">Belum ada transaksi</td></tr>
-                <?php else: ?>
-                    <?php while ($tm = $trans_masuk->fetch_assoc()): ?>
-                    <tr>
-                        <td><span class="badge badge-success"><?= $tm['no_transaksi'] ?></span></td>
-                        <td><?= htmlspecialchars($tm['nama_pemasok'] ?? '-') ?></td>
-                        <td><?= tgl_indo($tm['tanggal']) ?></td>
-                        <td><strong><?= rupiah($tm['total_nilai']) ?></strong></td>
-                    </tr>
-                    <?php endwhile; ?>
+                <tr><td colspan="4" class="text-center text-muted" style="padding:24px">Belum ada transaksi</td></tr>
                 <?php endif; ?>
+                <?php while ($tm = $trans_masuk->fetch_assoc()): ?>
+                <tr>
+                    <td><span class="badge badge-success"><?= $tm['no_transaksi'] ?></span></td>
+                    <td><?= htmlspecialchars($tm['nama_pemasok'] ?? '-') ?></td>
+                    <td><?= tgl_indo($tm['tanggal']) ?></td>
+                    <td><strong><?= rupiah($tm['total_nilai']) ?></strong></td>
+                </tr>
+                <?php endwhile; ?>
                 </tbody>
             </table>
         </div>
     </div>
 
-    <!-- Penjualan Terbaru -->
-    <div class="card">
+    <div class="card" style="animation-delay:.3s">
         <div class="card-header">
             <div class="card-header-icon" style="background:#fee2e2;color:#dc2626"><i class="fas fa-arrow-circle-up"></i></div>
             <div>
@@ -234,21 +248,20 @@ include 'header.php';
                 </thead>
                 <tbody>
                 <?php if ($trans_keluar->num_rows === 0): ?>
-                    <tr><td colspan="4" class="text-center text-muted" style="padding:24px">Belum ada transaksi</td></tr>
-                <?php else: ?>
-                    <?php while ($tk = $trans_keluar->fetch_assoc()): ?>
-                    <tr>
-                        <td><span class="badge badge-danger"><?= $tk['no_transaksi'] ?></span></td>
-                        <td><?= htmlspecialchars($tk['nama_pelanggan'] ?? '-') ?></td>
-                        <td><?= tgl_indo($tk['tanggal']) ?></td>
-                        <td><strong><?= rupiah($tk['total_bayar']) ?></strong></td>
-                    </tr>
-                    <?php endwhile; ?>
+                <tr><td colspan="4" class="text-center text-muted" style="padding:24px">Belum ada transaksi</td></tr>
                 <?php endif; ?>
+                <?php while ($tk = $trans_keluar->fetch_assoc()): ?>
+                <tr>
+                    <td><span class="badge badge-danger"><?= $tk['no_transaksi'] ?></span></td>
+                    <td><?= htmlspecialchars($tk['nama_pelanggan'] ?? '-') ?></td>
+                    <td><?= tgl_indo($tk['tanggal']) ?></td>
+                    <td><strong><?= rupiah($tk['total_bayar']) ?></strong></td>
+                </tr>
+                <?php endwhile; ?>
                 </tbody>
             </table>
         </div>
     </div>
 </div>
 
-<?php include 'footer.php';
+<?php include 'footer.php'; ?>

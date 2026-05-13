@@ -1,6 +1,7 @@
 <?php
 require_once '../config/auth.php';
 require_once '../config/koneksi.php';
+cek_admin();
 
 $id = (int)($_GET['id'] ?? 0);
 if (!$id) { header('Location: kelola_kategori.php'); exit; }

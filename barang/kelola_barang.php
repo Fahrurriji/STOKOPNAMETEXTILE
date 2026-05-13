@@ -1,6 +1,7 @@
 <?php
 require_once '../config/auth.php';
 require_once '../config/koneksi.php';
+cek_admin();
 $page_title = 'Kelola Produk / Barang';
 
 if (isset($_SESSION['pesan'])) { $pesan = $_SESSION['pesan']; unset($_SESSION['pesan']); }

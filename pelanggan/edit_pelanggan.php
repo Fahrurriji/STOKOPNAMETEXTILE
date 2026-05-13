@@ -1,6 +1,7 @@
 <?php
 require_once '../config/auth.php';
 require_once '../config/koneksi.php';
+cek_admin();
 $page_title = 'Edit Pelanggan';
 $id = (int)($_GET['id'] ?? 0);
 if (!$id) { header('Location: kelola_pelanggan.php'); exit; }
@@ -36,4 +37,4 @@ include '../header.php';
     </div>
   </form></div>
 </div></div>
-<?php include '../footer.php'; ?>
+<?php include '../footer.php';

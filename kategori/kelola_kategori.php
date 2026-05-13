@@ -1,6 +1,7 @@
 <?php
 require_once '../config/auth.php';
 require_once '../config/koneksi.php';
+cek_admin();
 $page_title = 'Kelola Kategori';
 
 $pesan = '';

@@ -2,6 +2,7 @@
 // PASTIKAN TIDAK ADA SPASI DI ATAS TAG PHP INI
 require_once '../config/auth.php';
 require_once '../config/koneksi.php';
+cek_admin();
 
 // Gunakan session_start jika belum dipanggil di auth.php
 if (session_status() === PHP_SESSION_NONE) {

@@ -1,6 +1,7 @@
 <?php
 require_once '../config/auth.php';
 require_once '../config/koneksi.php';
+cek_admin();
 $page_title = 'Kelola Pemasok';
 if (isset($_SESSION['pesan'])) { $pesan = $_SESSION['pesan']; unset($_SESSION['pesan']); }
 if (isset($_SESSION['error'])) { $error = $_SESSION['error']; unset($_SESSION['error']); }

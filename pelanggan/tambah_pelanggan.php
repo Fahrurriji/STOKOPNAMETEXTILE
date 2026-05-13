@@ -1,6 +1,7 @@
 <?php
 require_once '../config/auth.php';
 require_once '../config/koneksi.php';
+cek_admin();
 $page_title = 'Tambah Pelanggan';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $kode  = strtoupper(trim(esc($conn, $_POST['kode_pelanggan'])));
