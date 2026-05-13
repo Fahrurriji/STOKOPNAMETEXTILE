@@ -2,7 +2,7 @@
 if (session_status() === PHP_SESSION_NONE) session_start();
 
 // PAKSA nama folder proyek yang benar
-$project_folder = 'STOKOPNAMETEXTILE'; 
+$project_folder = ''; 
 
 // Membuat konstanta BASEURL yang aman
 $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https://" : "http://";
