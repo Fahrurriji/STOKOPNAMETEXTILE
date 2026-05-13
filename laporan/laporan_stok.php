@@ -6,7 +6,19 @@ $page_title = 'Laporan Stok Inventaris';
 $filter_kat    = (int)($_GET['kategori'] ?? 0);
 $filter_status = $_GET['status'] ?? 'semua';
 
-$kategori_list = $conn->query("SELECT * FROM kategori ORDER BY nama_kategori");
+$kategori_list_result = $conn->query("SELECT * FROM kategori ORDER BY nama_kategori");
+$kategori_list = [];
+
+// Konversi hasil query ke array untuk kompatibilitas
+if ($kategori_list_result) {
+    if (method_exists($kategori_list_result, 'fetch_assoc')) {
+        while ($row = $kategori_list_result->fetch_assoc()) {
+            $kategori_list[] = $row;
+        }
+    } elseif (is_array($kategori_list_result)) {
+        $kategori_list = $kategori_list_result;
+    }
+}
 
 $where = "WHERE b.status = 'aktif'";
 if ($filter_kat)  $where .= " AND b.id_kategori = $filter_kat";
@@ -22,17 +34,28 @@ $data = $conn->query("SELECT b.*, k.nama_kategori, p.nama_pemasok
     ORDER BY k.nama_kategori, b.nama_barang");
 
 if (!$data) {
-    die("Error pada query data: " . $conn->error);
+    $error_msg = (is_object($conn) && isset($conn->error)) ? $conn->error : 'Unknown error';
+    die("Error pada query data: " . $error_msg);
 }
 
 // Hitung total nilai
 $q_total = $conn->query("SELECT SUM(b.stok * b.harga_jual) as total_jual, SUM(b.stok * b.harga_beli) as total_beli, COUNT(*) as jml FROM barang b $where");
 
 if (!$q_total) {
-    die("Error pada query total: " . $conn->error);
+    $error_msg = (is_object($conn) && isset($conn->error)) ? $conn->error : 'Unknown error';
+    die("Error pada query total: " . $error_msg);
 }
 
-$total = $q_total->fetch_assoc() ?? ['jml' => 0, 'total_beli' => 0, 'total_jual' => 0];
+$total = null;
+if (method_exists($q_total, 'fetch_assoc')) {
+    $total = $q_total->fetch_assoc();
+} elseif (is_array($q_total)) {
+    $total = array_shift($q_total);
+}
+
+if (!$total) {
+    $total = ['jml' => 0, 'total_beli' => 0, 'total_jual' => 0];
+}
 
 include '../header.php';
 ?>
@@ -53,11 +76,11 @@ include '../header.php';
                     <i class="fas fa-tags input-icon"></i>
                     <select name="kategori" class="form-control" style="width:200px" onchange="this.form.submit()">
                         <option value="">Semua Kategori</option>
-                        <?php $kategori_list->data_seek(0); while ($kl = $kategori_list->fetch_assoc()): ?>
+                        <?php foreach ($kategori_list as $kl): ?>
                         <option value="<?= $kl['id'] ?>" <?= $filter_kat == $kl['id'] ? 'selected' : '' ?>>
                             <?= htmlspecialchars($kl['nama_kategori']) ?>
                         </option>
-                        <?php endwhile; ?>
+                        <?php endforeach; ?>
                     </select>
                 </div>
             </div>
@@ -132,7 +155,14 @@ include '../header.php';
                 </tr>
             </thead>
             <tbody>
-            <?php if ($data->num_rows === 0): ?>
+            <?php 
+            // Kompatibel dengan MySQLi dan PDO wrapper
+            $num_rows = 0;
+            if (is_object($data) && isset($data->num_rows)) {
+                $num_rows = $data->num_rows;
+            }
+            
+            if ($num_rows === 0): ?>
             <tr><td colspan="13">
                 <div class="empty-state"><div class="es-icon">📦</div>
                     <h4>Tidak ada data</h4><p>Coba ubah filter pencarian</p>
