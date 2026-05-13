@@ -1,35 +1,42 @@
 <?php
 // =====================================================
-// KONFIGURASI KONEKSI DATABASE (CLOUD-READY)
+// KONFIGURASI KONEKSI DATABASE
+// STOK OPNAME INVENTARIS GUDANG TEXTILE
 // =====================================================
 
-// Mengambil variabel dari Railway Environment Variables
-define('DB_HOST', getenv('DB_HOST'));
-define('DB_USER', getenv('DB_USER'));
-define('DB_PASS', getenv('DB_PASS'));
-define('DB_NAME', getenv('DB_NAME'));
-define('DB_PORT', getenv('DB_PORT') ?: '3306'); // Port default MySQL
+define('DB_HOST', 'localhost');
+define('DB_USER', 'root');
+define('DB_PASS', '');
+define('DB_NAME', 'db_stokopname'); // Pastikan nama DB sesuai
 define('DB_CHARSET', 'utf8mb4');
 
-// URL Base dinamis
-$BASE = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://" . $_SERVER['HTTP_HOST'] . "/";
+// --- TAMBAHKAN INI ---
+// Sesuaikan "stok_opname" dengan nama folder projek kamu di htdocs
+$BASE = "http://localhost/stok_opname/"; 
+// ---------------------
 
 // Session start
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
+// Aktifkan error reporting untuk mempermudah debugging
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 // Koneksi menggunakan MySQLi
-$conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME, DB_PORT);
+$conn = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 
 // Cek koneksi
 if ($conn->connect_error) {
-    die('Koneksi Database Gagal: ' . $conn->connect_error);
+    die('<div style="font-family:sans-serif;padding:30px;background:#fff0f0;border:2px solid #e74c3c;border-radius:10px;margin:30px;">
+        <h2 style="color:#e74c3c;">⚠️ Koneksi Database Gagal!</h2>
+        <p>Error: ' . $conn->connect_error . '</p>
+        <p>Pastikan XAMPP berjalan dan database <strong>' . DB_NAME . '</strong> sudah diimport.</p>
+    </div>');
 }
 
 $conn->set_charset(DB_CHARSET);
-
-// ... (sisa fungsi helper-mu tetap sama) ...
 
 // ... (sisanya tetap sama) ...
 
