@@ -5,11 +5,8 @@
 // =====================================================
 if (!isset($page_title)) $page_title = 'Dashboard';
 
-// BASE URL
-$script_url   = str_replace('\\', '/', $_SERVER['PHP_SELF']);
-$parts        = explode('/', trim($script_url, '/'));
-$base_index   = array_search('STOKOPNAMETEXTILE', $parts);
-$BASE         = ($base_index !== false) ? '/' . implode('/', array_slice($parts, 0, $base_index + 1)) . '/' : '/STOKOPNAMETEXTILE/';
+// Di Railway, app berjalan di root domain langsung
+$BASE = '/';
 
 // Active menu helpers
 $current_file = basename($_SERVER['PHP_SELF']);

@@ -11,7 +11,7 @@ define('DB_PASS', 'sJJshEUPvfpjpNiEtRcRCyXcXmVlmJJB');
 define('DB_NAME', 'railway');
 define('DB_CHARSET', 'utf8mb4');;
 
-$BASE = "https://stokopnametextile-production.up.railway.app/login.php";
+$BASE = '/';
 
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
