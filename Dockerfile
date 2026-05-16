@@ -11,5 +11,5 @@ WORKDIR /app
 # Expose port
 EXPOSE 80
 
-# Start FrankenPHP
-CMD ["frankenphp", "run", "--bind", "0.0.0.0:80"]
+# Start FrankenPHP (FrankenPHP runs on port 80 by default)
+CMD ["frankenphp", "run"]
