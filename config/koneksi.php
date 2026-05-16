@@ -4,15 +4,15 @@
 // STOK OPNAME INVENTARIS GUDANG TEXTILE
 // =====================================================
 
-define('DB_HOST', 'localhost');
+define('DB_HOST', 'mysql.railway.internal');
 define('DB_USER', 'root');
-define('DB_PASS', '');
-define('DB_NAME', 'db_stokopname'); // Pastikan nama DB sesuai
+define('DB_PASS', 'sJJshEUPvfpjpNiEtRcRCyXcXmVlmJJB');
+define('DB_NAME', 'railway'); // Pastikan nama DB sesuai
 define('DB_CHARSET', 'utf8mb4');
 
 // --- TAMBAHKAN INI ---
 // Sesuaikan "stok_opname" dengan nama folder projek kamu di htdocs
-$BASE = "http://localhost/stok_opname/"; 
+$BASE = "https://stokopnametextile-production.up.railway.app//login.php"; 
 // ---------------------
 
 // Session start
