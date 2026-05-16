@@ -8,10 +8,7 @@ if (isset($_SESSION['user_id'])) {
 }
 
 // Deteksi BASE URL
-$script_url = str_replace('\\', '/', $_SERVER['PHP_SELF']);
-$parts = explode('/', trim($script_url, '/'));
-$base_index = array_search('STOKOPNAMETEXTILE', $parts);
-$BASE = ($base_index !== false) ? '/' . implode('/', array_slice($parts, 0, $base_index + 1)) . '/' : '/STOKOPNAMETEXTILE/';
+$BASE = '/';
 
 $error = '';
 
