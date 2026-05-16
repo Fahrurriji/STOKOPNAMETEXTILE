@@ -188,6 +188,6 @@ if ($is_admin && isset($conn)) {
             </a>
         </div>
     </header>
-    <main class="page-content">
-PHPEOF
-echo "Header selesai"
+<main class="page-content">
+<?php
+// Header selesai
