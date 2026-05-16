@@ -1,4 +1,4 @@
-FROM dunglas/frankenphp:php8.4.21-bookworm
+FROM dunglas/frankenphp:php8.4-bookworm
 
 # Enable MySQLi and PDO MySQL extensions
 RUN install-php-extensions mysqli pdo_mysql
@@ -8,8 +8,8 @@ COPY . /app
 
 WORKDIR /app
 
-# Expose port
-EXPOSE 80
+# Copy Caddyfile
+COPY Caddyfile /etc/caddy/Caddyfile
 
-# Start FrankenPHP
-CMD ["frankenphp", "run", "--bind", "0.0.0.0:80"]
+# Start FrankenPHP with config
+CMD ["frankenphp", "run", "--config", "/etc/caddy/Caddyfile"]

@@ -1,0 +1,14 @@
+{
+    # Disable admin endpoint (not needed on Railway)
+    admin off
+    # Disable automatic HTTPS (Railway handles TLS)
+    auto_https off
+}
+
+# Listen on Railway's dynamic PORT
+:{$PORT:80}
+
+root * /app
+
+# Enable PHP via FrankenPHP
+php_server

@@ -1,2 +1,0 @@
-[build]
-nixpkgs = ["php83-mysqli", "php83-pdo", "php83-pdo_mysql"]
